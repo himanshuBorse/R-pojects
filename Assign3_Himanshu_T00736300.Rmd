@@ -1,0 +1,403 @@
+---
+title: "Assing3_Himanshu_t00736300"
+author: "Himanshu_Borse"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question 1
+## A)
+- The **User Defined Function** help us to organize our code into smaller chunks and treat complicated tasks as a single step. It also help for code reusability.
+
+- Functions have their own workspaces, therefore variables assigned within a function body never enter the global environment (workspace).
+
+- By applying the return() method, we can make sure that a function returns the required result or values. If the return() method is not used, the function will return the most recently evaluated expression, which might be confusing.
+
+- Conditional statements are a common way to add logic to code in R. They come in useful when you desire to run several code blocks based on the value of the variable. if and ifelse statements, for instance.
+
+- We can add default values to some or all of the arguments of a function by simply adding the defaults into the function definition. For example, F <- function(a = 1, b = 2, c = 3){a + b + c}.
+
+## B)
+
+- The three main types of loops are
+  + for loops
+  + while loop
+  + repeat loop
+  
+- Each of these three loops may be ended by using the break command, which is intended to terminate the loop early. It is written within a loop. For instance, if(x == 5){break}. The code is executed until the exit condition is met which here is when x is equal to 5.
+
+- It is not advisable to use loops in R as often as possible because loops can be slow and inefficient when working with large datasets. There are better alternatives to loops like lapply() function. It goes through each element of an object to perform a task (function) and the output is represented as a list.
+
+## C)
+
+- We use the nchar() function to determine the length of a string in R. It returns the number of characters in a string. The length() function does not work here. For example nchar("ADSC1010") returns 8.
+
+- Multiple texts can be combined or concatenated using the paste() function. A space character serves as the delimiter by default. By combining the two strings, paste("Hello","World"), for instance, generates "Hello World."
+
+- We can separate a string using delimiter by using the **strsplit()** function. For example,
+```{r}
+# Defining a string
+example.string <- "Hello World"
+
+# Separating the string using strsplit() function
+strsplit(example.string," ")
+```
+
+
+## D)
+
+- We get today's date in R by using the **Sys.Date()** function. For example,
+```{r}
+Sys.Date()
+```
+
+- We should convert date strings to date objects when working with real world data which is date related. We can use as.Date() function to convert date string to date object. For example, as.Date("YYYY-MM-DD").
+
+- Date and time data are stored in **POSIXlt** class objects as a list of vectors.
+
+# Question 2
+## A)
+```{r}
+vec_summary <- function(x){ # function to calculate median,max,min of numeric vector
+  vec_median = median(x)
+  vec_max = max(x)
+  vec_min = min(x)
+  vec_op = c(vec_median,vec_max,vec_min)
+  return(vec_op)
+}
+```
+
+```{r}
+x1 <- c(1,1,3,6,4)
+#x1 <-  c(2,4,6,0.4,13)
+calculations = vec_summary(x1) # calling function vec_summary and passing parameter.
+cat("\nThe Median of the Vector is :", calculations[1],
+    "\nThe Maximum value of the Vector is :", calculations[2],
+    "\nThe Minimum value of the Vector is :", calculations[3]
+    )
+```
+## B)
+
+```{r}
+mat_summary = function(matrixA){ # function to calculate trace and sum of last column
+  diagnolElement = diag(matrixA) # diag() returns sum of diagnol
+  diagnolSum = sum(diagnolElement)
+  
+  totalColumn = dim(matrixA)[2] #here, dim return dim(row,column), hence 2 is return to access column to calculate total column in matrix.
+  columnSum = sum(matrixA[,totalColumn])
+  
+  cal = c(diagnolSum,columnSum)
+  return(cal)
+}
+
+```
+
+```{r}
+# declaring and initating matrix
+A = matrix(
+  c(1,0,0,2),
+  nrow=2,
+  ncol=2,
+  byrow= TRUE
+)
+B = matrix(
+  c(1,0,-1,2,1,7,-2,8,-10),
+  nrow= 3,
+  ncol= 3,
+  byrow = TRUE
+)
+
+matrixSummary = mat_summary(A)
+cat("\nThe Trace(Sum of diagnol) of matrix = ", matrixSummary[1],
+    "\nThe sum of last column of matrix is = ", matrixSummary[2]
+    )
+
+```
+
+## C)
+
+```{r}
+# function two_in that takes a vector x and integer n as inputs (in that exact order) and returns as output a matrix with n rows, each of which is equal to x.
+two_in <- function(x,n){ 
+  mainMatrix <- matrix(x, nrow = n, ncol = length(x), byrow = TRUE)
+  return(mainMatrix)
+}
+```
+
+```{r}
+x1 <- c(1,1,3,6)
+n1 <- 4
+x2 <- c(2,4,6)
+n2 <- 7
+
+vec_matrix = two_in(x2,n2) # calling function
+print(vec_matrix)
+```
+
+## D)
+```{r}
+vec_counter <- function(x){
+  vec_type = typeof(x)
+  msg = ""
+  vec_calculation = 0
+  if(vec_type == "character"){
+    msg = "The number of characters in your vector is:"
+    vec_calculation = length(x)
+  }else if(vec_type == "double"){
+    msg = "The length of your numeric vector is:"
+    vec_calculation = length(x)
+  }else if(vec_type == "logical"){
+    vec_calculation = 0
+    msg = "I cannot count this class"
+  }
+
+  vec_return = c(msg, vec_calculation)
+  return(vec_return)
+}
+```
+
+```{r}
+x1 <- c("I", "Like ", "R")
+x2 <- c(2,4,6,1.5)
+x3 <- c(TRUE, TRUE, FALSE)
+
+
+vec_output = vec_counter(x2)
+if(vec_output[2] == 0){
+  print(vec_output[1])
+}else{
+  cat(vec_output[1],"",vec_output[2])
+}
+```
+
+
+# Question 3
+## A)
+Printing vector using for loops
+
+```{r}
+# x1 = 1,2,3,4,5,6,7,8,9,10
+X1 = 0
+for(i in 1:10){
+  X1[i]<- i
+}
+
+print(X1)
+```
+
+```{r}
+#x2 = 1,-2,3,-4,5,-6,7,-8,9,-10
+X2 = 0
+for(i in 1:10){
+  X2[i] = i
+  if(i%%2 == 0){
+    X2[i] = -i 
+  }
+  
+}
+
+print(X2)
+```
+
+```{r}
+#x3 = 1,1,2,3,5,8,13,21,34,55
+x3 = 0
+x3[1] = 1
+x3[2] = 1
+for( i in 3:10){ # for loops for printing fibonacci sequence
+  x3[i] <- x3[i-1] + x3[i-2] 
+}
+
+print(x3)
+```
+
+## B)
+
+# using while loop
+```{r}
+x = 250
+i = 1
+while(x != 10000){
+  i = i + 1
+  x = x +250
+}
+cat(i,"deposits of $250 will be needed to reach $10000")
+
+# it will take 40 deposits of $250 to reach $10000
+```
+
+
+## C)
+# creating a vector 
+```{r}
+# creating a vector that gets longer with each deposit, stop as soon as reach threshold
+vec = 0
+i = 1
+x = 0
+while(x != 10000){ #threshold
+  vec[i+1] = vec[i]+1
+  i = i + 1
+  x = x +250
+  print(vec)
+}
+
+
+```
+
+```{r}
+# Tracking of current balance and number of deposits, with threshold
+deposit = 1
+i = 1
+amount = 250
+currentBalance = amount
+threshold = 10000
+while(amount != threshold){
+  deposit[i+1] = deposit[i]+1
+  currentBalance[i+1] = currentBalance[1] + amount # tracing currenct balance
+  amount = amount +250
+  i = i + 1
+}
+deposit
+currentBalance
+
+
+```
+
+
+## D)
+```{r}
+# function with nested loops to sum all possible combinations of elements ot two number vectors.
+sumCombination <- function(vec1, vec2){
+  sum =  0
+  k =1
+  for(i in 1:length(vec1)){
+   # print(vec1[i])
+    for(j in 1:length(vec2)){ # nested loop
+      if(vec1[i] + vec2[j] <=25 ){ # Threshold for sum if exceeds 25
+        sum[k] = vec1[i] + vec2[j] # summing combinations
+        k = k+1
+      }
+      else{
+        break # break statement for sum of combination exceeds 25
+      }
+    }
+    i = i+1
+    j = j+1
+  }
+  return(sum)
+}
+
+```
+# Tesing Function
+```{r}
+x1 = c(1,2,3)
+x2 = c(1,-2,3)
+summationVec =  sumCombination(x1,x2) # calling Function
+print(summationVec)
+length(summationVec)
+```
+
+
+```{r}
+x1 = c(1,2)
+x2 = c(1,-2,1.5,13,7,4,-12)
+summationVec =  sumCombination(x1,x2) # calling Function
+print(summationVec)
+length(summationVec)
+```
+
+```{r}
+x1 = c(1,-1,1,-1)
+x2 = c(4,4,5)
+summationVec =  sumCombination(x1,x2) # calling Function
+print(summationVec)
+length(summationVec)
+```
+
+
+# Question 4
+# A)
+
+```{r}
+#string.digit function takes a character string and perform operation on it.
+strings.digit <- function(stringInput){
+  stringLength = nchar(stringInput)
+  if(stringLength < 10){
+    while(stringLength != 10){ #while loop for adding "0" before the string if length less than 10
+      ch = "0"
+      stringInput = paste(ch , stringInput, sep = '')
+      stringInput
+      stringLength = stringLength + 1
+    }
+  }else if(stringLength >10){
+    while(stringLength !=10){ # while loop for removing extra character from string if length greater than 10
+      stringInput = substr(stringInput, 1,stringLength - 1)
+      stringInput
+      stringLength = stringLength - 1
+    }
+  }
+  return(stringInput)
+}
+```
+
+```{r}
+characterString = readline(prompt = 'please enter input : ')
+processedString = strings.digit(characterString) # calling stringws.digit function
+cat("The Initial String : ",characterString,"\nThe Processed String : ", processedString)
+```
+
+
+# B)
+```{r}
+# Copy and run the code
+library(stringi) #
+set.seed(1010)
+n <- 10000
+id <- stri_rand_strings(n, sample(8:12,n,replace = T), pattern = "[0-9A-Za-z]")
+data <- as.data.frame(id)
+#data
+
+```
+
+```{r}
+# rewriting strings.digit function for reference
+strings.digit <- function(stringInput){
+  stringLength = nchar(stringInput)
+  if(stringLength < 10){
+    while(stringLength != 10){
+      ch = "0"
+      stringInput = paste(ch , stringInput, sep = '')
+      stringInput
+      stringLength = stringLength + 1
+    }
+  }else if(stringLength >10){
+    while(stringLength !=10){
+      stringInput = substr(stringInput, 1,stringLength - 1)
+      stringInput
+      stringLength = stringLength - 1
+    }
+  }
+  return(stringInput)
+}
+```
+
+```{r}
+library(stringi)
+set.seed(1010)
+n <- 10000
+id <- stri_rand_strings(n, sample(8:12,n,replace = T), pattern = "[0-9A-Za-z]")
+data <- as.data.frame(id)
+newId = 0
+for( i in 1:nrow(data)){ # coverting each single element by processing it in strings.digit function
+  newId[i] = strings.digit(data[i,])
+}
+#newIdDataFrame = as.data.frame(newID)
+data$id.new <- newId
+head(data,10) # To print the first 10 element from the data frame
+tail(data,10) # To print the last 10 element from the data frame
+```
+
